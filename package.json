@@ -25,7 +25,9 @@
 		"publish": "npm run script -- publish"
 	},
 	"dependencies": {
-		"@riao/dbal": "^3.1.0"
+		"@riao/dbal": "^3.1.0",
+		"@riao/server-contract": "^1.0.0",
+		"express": "^4.19.2"
 	},
 	"devDependencies": {
 		"@istanbuljs/nyc-config-typescript": "^1.0.2",
