@@ -1,7 +1,7 @@
 {
-	"name": "{{project-name}}",
+	"name": "riao-server",
 	"version": "1.0.0",
-	"description": "{{project-name}}",
+	"description": "riao-server",
 	"private": "true",
 	"typescript-template": {
 		"base": "1.0.0",
@@ -42,13 +42,13 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/{{project-org}}/{{project-name}}.git"
+		"url": "git+https://github.com/riao-server/riao-server.git"
 	},
-	"author": "{{project-org}}",
+	"author": "riao-server",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/{{project-org}}/{{project-name}}/issues"
+		"url": "https://github.com/riao-server/riao-server/issues"
 	},
-	"homepage": "https://github.com/{{project-org}}/{{project-name}}#readme",
+	"homepage": "https://github.com/riao-server/riao-server#readme",
 	"keywords": []
 }
