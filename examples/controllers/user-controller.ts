@@ -13,7 +13,7 @@ export class UserController extends ModelController<User> {
 
 		return results.map((result) => ({
 			...result,
-			email: 'shabob',
+			username: 'shabob',
 		}));
 	}
 
