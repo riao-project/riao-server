@@ -1,0 +1,15 @@
+{
+	"ignore": [
+		".git",
+		"dist",
+		"node_modules",
+		"test",
+		".env.example",
+		".log",
+		".md",
+		".txt"
+	],
+	"watch": ["src/", "*.*", ".env"],
+	"exec": "npm start",
+	"ext": "*"
+}

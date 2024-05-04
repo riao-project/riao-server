@@ -27,3 +27,8 @@ To compile a production build, run `npm run lint:prod && npm run build`. The bui
 ### Generating Docs
 
 `npm run doc` and browse docs/index.html!
+
+
+### Environment Variables
+
+See `src/environment.ts` to see how to use this project's environment variables. Configure an environment in `.env` or with `process.env` (https://nodejs.org/dist/latest-v16.x/docs/api/process.html#processenv).
