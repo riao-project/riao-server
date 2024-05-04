@@ -65,7 +65,7 @@ export class RiaoServer {
 				this.app.get(
 					this.createPath(controller.path),
 					this.wrapEndpoint(async (request) =>
-						controller.getMany(request.body)
+						controller.getMany(request.query)
 					)
 				);
 			}

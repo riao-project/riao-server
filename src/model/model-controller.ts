@@ -1,4 +1,4 @@
-import { DatabaseRecord, QueryRepository } from '@riao/dbal';
+import { DatabaseRecord, QueryRepository, SelectQuery } from '@riao/dbal';
 import { ControllerInterface } from '../controller/controller';
 import {
 	DeleteOneRequest,
@@ -15,7 +15,13 @@ implements ControllerInterface<T> {
 	public path = 'model';
 
 	async getMany(request: GetManyRequest) {
-		return await this.repo.find({});
+		const findOptions: SelectQuery<T> = {};
+
+		if (request.limit) {
+			findOptions.limit = request.limit;
+		}
+
+		return await this.repo.find(findOptions);
 	}
 
 	async getOne(request: GetOneRequest) {
