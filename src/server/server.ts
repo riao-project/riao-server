@@ -37,7 +37,7 @@ export class RiaoServer {
 			// TODO: Error handling
 			const retval = await callback(request);
 
-			response.send(retval ?? '');
+			response.send(retval ?? {});
 		};
 	}
 
