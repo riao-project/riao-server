@@ -26,7 +26,7 @@ implements ControllerInterface<T> {
 
 	async postOne(request: PostOneRequest<T>) {
 		const id = await this.repo.insertOne({
-			record: request.data,
+			record: <T>(<unknown>request),
 		});
 
 		return await this.getOne({

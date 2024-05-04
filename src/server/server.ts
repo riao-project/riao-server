@@ -85,9 +85,7 @@ export class RiaoServer {
 				this.app.post(
 					this.createPath(controller.path),
 					this.wrapEndpoint(async (request) =>
-						controller.postOne({
-							data: request.body,
-						})
+						controller.postOne(request.body)
 					)
 				);
 			}
