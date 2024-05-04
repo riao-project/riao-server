@@ -1,8 +1,10 @@
+import { maindb } from '../../database/main';
 import 'jasmine';
-import * as index from '../../src';
 
-describe('riao-server', () => {
-	it('exports a', () => {
-		expect(index.a).toBeTrue();
-	});
+beforeAll(async () => {
+	await maindb.init();
+});
+
+afterAll(async () => {
+	await maindb.disconnect();
 });
