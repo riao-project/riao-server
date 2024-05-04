@@ -59,68 +59,72 @@ export class RiaoServer {
 
 	protected registerControllers() {
 		for (const controllerType of this.controllers) {
-			const controller = new controllerType();
+			this.registerController(controllerType);
+		}
+	}
 
-			if (controller.getMany) {
-				this.app.get(
-					this.createPath(controller.path),
-					this.wrapEndpoint(async (request) =>
-						controller.getMany(request.query)
-					)
-				);
-			}
+	protected registerController(controllerType: Controller) {
+		const controller = new controllerType();
 
-			if (controller.getOne) {
-				this.app.get(
-					this.createPath(controller.path + '/:id'),
-					this.wrapEndpoint(async (request) =>
-						controller.getOne({
-							id: request.params.id,
-						})
-					)
-				);
-			}
+		if (controller.getMany) {
+			this.app.get(
+				this.createPath(controller.path),
+				this.wrapEndpoint(async (request) =>
+					controller.getMany(request.query)
+				)
+			);
+		}
 
-			if (controller.postOne) {
-				this.app.post(
-					this.createPath(controller.path),
-					this.wrapEndpoint(async (request) =>
-						controller.postOne(request.body)
-					)
-				);
-			}
+		if (controller.getOne) {
+			this.app.get(
+				this.createPath(controller.path + '/:id'),
+				this.wrapEndpoint(async (request) =>
+					controller.getOne({
+						id: request.params.id,
+					})
+				)
+			);
+		}
 
-			if (controller.patchOne) {
-				this.app.patch(
-					this.createPath(controller.path + '/:id'),
-					this.wrapEndpoint(async (request) =>
-						controller.patchOne({
-							id: request.params.id,
-							data: request.body,
-						})
-					)
-				);
-			}
+		if (controller.postOne) {
+			this.app.post(
+				this.createPath(controller.path),
+				this.wrapEndpoint(async (request) =>
+					controller.postOne(request.body)
+				)
+			);
+		}
 
-			if (controller.deleteOne) {
-				this.app.delete(
-					this.createPath(controller.path + '/:id'),
-					this.wrapEndpoint(async (request) =>
-						controller.deleteOne({
-							id: request.params.id,
-						})
-					)
-				);
-			}
+		if (controller.patchOne) {
+			this.app.patch(
+				this.createPath(controller.path + '/:id'),
+				this.wrapEndpoint(async (request) =>
+					controller.patchOne({
+						id: request.params.id,
+						data: request.body,
+					})
+				)
+			);
+		}
 
-			for (const actionKey in controller.actions) {
-				this.app.post(
-					this.createPath(controller.path + '/' + actionKey),
-					this.wrapEndpoint(async (request) =>
-						controller.actions[actionKey](request.body)
-					)
-				);
-			}
+		if (controller.deleteOne) {
+			this.app.delete(
+				this.createPath(controller.path + '/:id'),
+				this.wrapEndpoint(async (request) =>
+					controller.deleteOne({
+						id: request.params.id,
+					})
+				)
+			);
+		}
+
+		for (const actionKey in controller.actions) {
+			this.app.post(
+				this.createPath(controller.path + '/' + actionKey),
+				this.wrapEndpoint(async (request) =>
+					controller.actions[actionKey](request.body)
+				)
+			);
 		}
 	}
 }
