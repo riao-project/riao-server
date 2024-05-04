@@ -8,15 +8,6 @@ export class UserController extends ModelController<User> {
 	path = 'users';
 	repo = maindb.getQueryRepository<User>({ table: 'users' });
 
-	async getMany(request: GetManyRequest) {
-		const results = await super.getMany(request);
-
-		return results.map((result) => ({
-			...result,
-			username: 'shabob',
-		}));
-	}
-
 	actions = {
 		login: async (request: Partial<User>) => {
 			console.log('User is trying to login!', request.username);
