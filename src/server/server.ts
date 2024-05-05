@@ -6,7 +6,7 @@ import {
 
 import * as express from 'express';
 
-import { Controller } from '../controller';
+import { ControllerType } from '../controller';
 
 /**
  * GET ONE		GET /api/v1/users/:id
@@ -22,7 +22,7 @@ export class RiaoServer {
 	public port = 3000;
 	public prefix = 'api';
 	public apiVersion = 1;
-	protected controllers: Controller[] = [];
+	protected controllers: ControllerType[] = [];
 
 	protected app: ExpressApp;
 
@@ -63,7 +63,7 @@ export class RiaoServer {
 		}
 	}
 
-	protected registerController(controllerType: Controller) {
+	protected registerController(controllerType: ControllerType) {
 		const controller = new controllerType();
 
 		if (controller.getMany) {

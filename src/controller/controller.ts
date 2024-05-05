@@ -32,4 +32,4 @@ export interface ControllerInterface<
 	actions?: { [key: string]: EndpointFunction<ApiRequest, ApiResponse> };
 }
 
-export type Controller = { new (): ControllerInterface };
+export type ControllerType = { new (): ControllerInterface };
