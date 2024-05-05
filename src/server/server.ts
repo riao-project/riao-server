@@ -13,6 +13,9 @@ import { Iam } from '@riao/iam';
 import { ControllerInterface, ControllerType } from '../controller';
 import { BaseEndpointRequest } from '../endpoint';
 
+import { Log } from 'ts-tiny-log';
+import { getRemoteIp } from '../http';
+
 /**
  * GET ONE		GET /api/v1/users/:id
  * GET MANY		GET /api/v1/users
@@ -32,6 +35,7 @@ export class RiaoServer {
 	protected iam?: Iam;
 
 	protected app: ExpressApp;
+	protected log: Log = new Log({});
 
 	protected createPath(path: string) {
 		return `/${this.prefix}/v${this.apiVersion}/${path}`;
@@ -65,7 +69,10 @@ export class RiaoServer {
 			}
 			catch (e) {
 				if (e instanceof AuthenticationError) {
-					console.warn('AUTH Error', e);
+					this.log.warn(
+						getRemoteIp(request) + '\t| AUTH Error',
+						e.message
+					);
 					response.status(401);
 					response.send({
 						message: 'Authentication error: ' + e.message,
@@ -73,7 +80,10 @@ export class RiaoServer {
 				}
 				else {
 					// TODO: Error handling
-					console.error('REQUEST Error', e);
+					this.log.error(
+						getRemoteIp(request) + '\t| REQUEST Error',
+						e
+					);
 					response.sendStatus(500);
 				}
 			}
