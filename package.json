@@ -27,6 +27,7 @@
 	"dependencies": {
 		"@riao/dbal": "^3.1.0",
 		"@riao/http-client": "file:../riao-http-client/src",
+		"@riao/iam": "file:../riao-iam/src",
 		"@riao/server-contract": "file:../riao-server-contract/src",
 		"express": "^4.19.2"
 	},
