@@ -44,11 +44,16 @@ export class RiaoServer {
 	) {
 		return async (request: ExpressRequest, response: ExpressResponse) => {
 			try {
+				// TODO: Timeout?
+
 				// Authentication
 				const { userId, scopes } = await this.authenticate(
 					request,
 					controller
 				);
+
+				// TODO: Authorization?
+				// TODO: Validation?
 
 				const retval = await callback({
 					http: request,
