@@ -1,8 +1,8 @@
 import 'jasmine';
-import { ModelController } from '../../src/model';
+import { ModelController } from '../../../src/controller';
 import { ApiRequest } from '@riao/server-contract';
-import { maindb } from '../../database/main';
-import { User } from '../../examples/models/user';
+import { maindb } from '../../../database/main';
+import { User } from '../../../examples/models/user';
 
 const repo = maindb.getQueryRepository<User>({ table: 'users' });
 

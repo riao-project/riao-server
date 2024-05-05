@@ -1,5 +1,5 @@
 import 'jasmine';
-import * as index from '../../src';
+import { ControllerInterface } from '../../../src/controller';
 import {
 	ApiRequest,
 	DeleteOneRequest,
@@ -9,7 +9,7 @@ import {
 	PostOneRequest,
 } from '@riao/server-contract';
 
-class TestController implements index.ControllerInterface {
+class TestController implements ControllerInterface {
 	path = 'test';
 
 	async getMany(request: GetManyRequest) {
