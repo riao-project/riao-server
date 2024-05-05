@@ -6,6 +6,10 @@ import {
 
 import * as express from 'express';
 
+import { DatabaseRecordId } from '@riao/dbal';
+import { AuthenticationError } from '@riao/iam/errors/authentication-error';
+import { Iam } from '@riao/iam';
+
 import { ControllerInterface, ControllerType } from '../controller';
 import { BaseEndpointRequest } from '../endpoint';
 
@@ -25,6 +29,8 @@ export class RiaoServer {
 	public apiVersion = 1;
 	protected controllers: ControllerType[] = [];
 
+	protected iam?: Iam;
+
 	protected app: ExpressApp;
 
 	protected createPath(path: string) {
@@ -37,15 +43,35 @@ export class RiaoServer {
 		callback: (request: BaseEndpointRequest) => Promise<any>
 	) {
 		return async (request: ExpressRequest, response: ExpressResponse) => {
-			// TODO: Error handling
+			try {
+				// Authentication
+				const { userId, scopes } = await this.authenticate(
+					request,
+					controller
+				);
 
-			const retval = await callback({
-				http: request,
-				userId: null,
-				scopes: [],
-			});
+				const retval = await callback({
+					http: request,
+					userId,
+					scopes,
+				});
 
-			response.send(retval ?? {});
+				response.send(retval ?? {});
+			}
+			catch (e) {
+				if (e instanceof AuthenticationError) {
+					console.warn('AUTH Error', e);
+					response.status(401);
+					response.send({
+						message: 'Authentication error: ' + e.message,
+					});
+				}
+				else {
+					// TODO: Error handling
+					console.error('REQUEST Error', e);
+					response.sendStatus(500);
+				}
+			}
 		};
 	}
 
@@ -154,5 +180,38 @@ export class RiaoServer {
 				)
 			);
 		}
+	}
+
+	protected async authenticate(
+		request: ExpressRequest,
+		controller: ControllerInterface
+	) {
+		let userId: DatabaseRecordId;
+		let scopes: string[];
+
+		if (this.iam && controller.iam !== false) {
+			if (request.headers?.authorization) {
+				const access: string = request.headers.authorization.replace(
+					'Bearer ',
+					''
+				);
+
+				if (!access || !access.length) {
+					throw new Error('Not authenticated');
+				}
+
+				const payload = await this.iam.verifyAccessToken({
+					accessToken: access,
+				});
+
+				userId = payload.userId;
+				scopes = payload.scopes;
+			}
+			else {
+				throw new AuthenticationError('Not authenticated');
+			}
+		}
+
+		return { userId, scopes };
 	}
 }

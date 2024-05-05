@@ -23,6 +23,8 @@ export interface ControllerInterface<
 	path: string;
 	name?: string;
 
+	iam?: boolean;
+
 	getMany?: EndpointFunction<GetManyRequest<T>, GetManyResponse<T>>;
 	getOne?: EndpointFunction<GetOneRequest<T>, GetOneResponse<T>>;
 	postOne?: EndpointFunction<PostOneRequest<T>, PostOneResponse<T>>;
