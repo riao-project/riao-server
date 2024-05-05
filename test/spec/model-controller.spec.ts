@@ -41,7 +41,7 @@ describe('Controller', () => {
 	});
 
 	it('can get many', async () => {
-		expect(await controller.getMany({ limit: 5 })).toEqual([
+		expect(await controller.getMany({ query: { limit: 5 } })).toEqual([
 			{ id: 1, username: 'test1', password: 'password1234' },
 			{ id: 2, username: 'test2', password: 'password1234' },
 			{ id: 3, username: 'test3', password: 'password1234' },
@@ -51,7 +51,7 @@ describe('Controller', () => {
 	});
 
 	it('can get one', async () => {
-		expect(await controller.getOne({ id: 1 })).toEqual({
+		expect(await controller.getOne({ params: { id: 1 } })).toEqual({
 			id: 1,
 			username: 'test1',
 			password: 'password1234',
@@ -61,8 +61,10 @@ describe('Controller', () => {
 	it('can post one', async () => {
 		expect(
 			await controller.postOne({
-				username: 'tom@test.com',
-				password: 'password1234',
+				body: {
+					username: 'tom@test.com',
+					password: 'password1234',
+				},
 			})
 		).toEqual({
 			id: 11,
@@ -74,8 +76,8 @@ describe('Controller', () => {
 	it('can patch one', async () => {
 		expect(
 			await controller.patchOne({
-				id: 7,
-				data: { username: 'tomupdated@test.com' },
+				params: { id: 7 },
+				body: { username: 'tomupdated@test.com' },
 			})
 		).toEqual(<any>{
 			id: 7,
@@ -85,18 +87,18 @@ describe('Controller', () => {
 	});
 
 	it('can delete one', async () => {
-		expect(
-			await controller.deleteOne({
-				id: 8,
-			})
-		).toEqual(undefined);
+		expect(await controller.deleteOne({ params: { id: 8 } })).toEqual(
+			undefined
+		);
 	});
 
 	it('can login', async () => {
 		expect(
 			await controller.actions.login({
-				username: 'login-user',
-				password: 'password1234',
+				body: {
+					username: 'login-user',
+					password: 'password1234',
+				},
 			})
 		).toEqual(undefined);
 	});

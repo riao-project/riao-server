@@ -17,8 +17,8 @@ implements ControllerInterface<T> {
 	async getMany(request: GetManyRequest) {
 		const findOptions: SelectQuery<T> = {};
 
-		if (request.limit) {
-			findOptions.limit = request.limit;
+		if (request.query.limit) {
+			findOptions.limit = request.query.limit;
 		}
 
 		return await this.repo.find(findOptions);
@@ -26,32 +26,32 @@ implements ControllerInterface<T> {
 
 	async getOne(request: GetOneRequest) {
 		return await this.repo.findOneOrFail({
-			where: <T>{ [this.identifiedBy]: +request.id }, // TODO: Not always an int!?
+			where: <T>{ [this.identifiedBy]: +request.params.id }, // TODO: Not always an int!?
 		});
 	}
 
 	async postOne(request: PostOneRequest<T>) {
 		const id = await this.repo.insertOne({
-			record: <T>(<unknown>request),
+			record: <T>request.body,
 		});
 
 		return await this.getOne({
-			id: id[this.identifiedBy],
+			params: { id: id[this.identifiedBy] },
 		});
 	}
 
 	async patchOne(request: PatchOneRequest<T>) {
 		await this.repo.update({
-			where: <T>{ [this.identifiedBy]: request.id },
-			set: request.data,
+			where: <T>{ [this.identifiedBy]: request.params.id },
+			set: request.body,
 		});
 
-		return await this.getOne({ id: request.id });
+		return await this.getOne({ params: { id: request.params.id } });
 	}
 
 	async deleteOne(request: DeleteOneRequest) {
 		await this.repo.delete({
-			where: <T>{ [this.identifiedBy]: request.id },
+			where: <T>{ [this.identifiedBy]: request.params.id },
 		});
 	}
 }

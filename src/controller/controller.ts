@@ -1,13 +1,13 @@
 import { EndpointFunction } from '../endpoint';
 import { DatabaseRecord } from '@riao/dbal';
 import {
-	ApiRequest,
+	ActionRequest,
 	DeleteOneRequest,
 	GetManyRequest,
 	GetOneRequest,
 	PatchOneRequest,
 	PostOneRequest,
-} from '@riao/server-contract/request';
+} from '../endpoint';
 import {
 	DeleteOneResponse,
 	GetManyResponse,
@@ -23,13 +23,13 @@ export interface ControllerInterface<
 	path: string;
 	name?: string;
 
-	getMany?: EndpointFunction<GetManyRequest, GetManyResponse<T>>;
-	getOne?: EndpointFunction<GetOneRequest, GetOneResponse<T>>;
+	getMany?: EndpointFunction<GetManyRequest<T>, GetManyResponse<T>>;
+	getOne?: EndpointFunction<GetOneRequest<T>, GetOneResponse<T>>;
 	postOne?: EndpointFunction<PostOneRequest<T>, PostOneResponse<T>>;
 	patchOne?: EndpointFunction<PatchOneRequest<T>, PatchOneResponse<T>>;
 	deleteOne?: EndpointFunction<DeleteOneRequest, DeleteOneResponse>;
 
-	actions?: { [key: string]: EndpointFunction<ApiRequest, ApiResponse> };
+	actions?: { [key: string]: EndpointFunction<ActionRequest, ApiResponse> };
 }
 
 export type ControllerType = { new (): ControllerInterface };

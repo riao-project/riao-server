@@ -1,5 +1,4 @@
 import { ModelController } from '../../src/model';
-import { GetManyRequest } from '@riao/server-contract/request';
 
 import { maindb } from '../../database/main';
 import { User } from '../../examples/models/user';

@@ -6,7 +6,8 @@ import {
 
 import * as express from 'express';
 
-import { ControllerType } from '../controller';
+import { ControllerInterface, ControllerType } from '../controller';
+import { BaseEndpointRequest } from '../endpoint';
 
 /**
  * GET ONE		GET /api/v1/users/:id
@@ -31,11 +32,18 @@ export class RiaoServer {
 	}
 
 	protected wrapEndpoint(
-		callback: (request: ExpressRequest) => Promise<any>
+		endpoint: string,
+		controller: ControllerInterface,
+		callback: (request: BaseEndpointRequest) => Promise<any>
 	) {
 		return async (request: ExpressRequest, response: ExpressResponse) => {
 			// TODO: Error handling
-			const retval = await callback(request);
+
+			const retval = await callback({
+				http: request,
+				userId: null,
+				scopes: [],
+			});
 
 			response.send(retval ?? {});
 		};
@@ -69,8 +77,12 @@ export class RiaoServer {
 		if (controller.getMany) {
 			this.app.get(
 				this.createPath(controller.path),
-				this.wrapEndpoint(async (request) =>
-					controller.getMany(request.query)
+				this.wrapEndpoint('get-many', controller, async (request) =>
+					controller.getMany({
+						...request,
+						query: request.http.query,
+						params: request.http.params,
+					})
 				)
 			);
 		}
@@ -78,9 +90,11 @@ export class RiaoServer {
 		if (controller.getOne) {
 			this.app.get(
 				this.createPath(controller.path + '/:id'),
-				this.wrapEndpoint(async (request) =>
+				this.wrapEndpoint('get-one', controller, async (request) =>
 					controller.getOne({
-						id: request.params.id,
+						...request,
+						query: request.http.query,
+						params: request.http.params,
 					})
 				)
 			);
@@ -89,8 +103,13 @@ export class RiaoServer {
 		if (controller.postOne) {
 			this.app.post(
 				this.createPath(controller.path),
-				this.wrapEndpoint(async (request) =>
-					controller.postOne(request.body)
+				this.wrapEndpoint('post-one', controller, async (request) =>
+					controller.postOne({
+						...request,
+						query: request.http.query,
+						params: request.http.params,
+						body: request.http.body,
+					})
 				)
 			);
 		}
@@ -98,10 +117,12 @@ export class RiaoServer {
 		if (controller.patchOne) {
 			this.app.patch(
 				this.createPath(controller.path + '/:id'),
-				this.wrapEndpoint(async (request) =>
+				this.wrapEndpoint('patch-one', controller, async (request) =>
 					controller.patchOne({
-						id: request.params.id,
-						data: request.body,
+						...request,
+						query: request.http.query,
+						params: request.http.params,
+						body: request.http.body,
 					})
 				)
 			);
@@ -110,9 +131,11 @@ export class RiaoServer {
 		if (controller.deleteOne) {
 			this.app.delete(
 				this.createPath(controller.path + '/:id'),
-				this.wrapEndpoint(async (request) =>
+				this.wrapEndpoint('delete-one', controller, async (request) =>
 					controller.deleteOne({
-						id: request.params.id,
+						...request,
+						query: request.http.query,
+						params: request.http.params,
 					})
 				)
 			);
@@ -121,8 +144,13 @@ export class RiaoServer {
 		for (const actionKey in controller.actions) {
 			this.app.post(
 				this.createPath(controller.path + '/' + actionKey),
-				this.wrapEndpoint(async (request) =>
-					controller.actions[actionKey](request.body)
+				this.wrapEndpoint(actionKey, controller, async (request) =>
+					controller.actions[actionKey]({
+						...request,
+						query: request.http.query,
+						params: request.http.params,
+						body: request.http.body,
+					})
 				)
 			);
 		}
