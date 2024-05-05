@@ -41,7 +41,7 @@ class TestIam extends Iam<PasswordLogin> {
 		privateKey: keypair.privateKey,
 	});
 }
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 999999;
+
 const iam = new TestIam();
 
 class TestAuthController implements ControllerInterface {
