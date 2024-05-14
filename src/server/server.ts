@@ -214,10 +214,9 @@ export class RiaoServer {
 
 		if (this.iam && controller.iam !== false) {
 			if (request.headers?.authorization) {
-				const access: string = request.headers.authorization.replace(
-					'Bearer ',
-					''
-				);
+				const access: string = request.headers.authorization
+					.replace('Bearer', '')
+					.trim();
 
 				if (!access || !access.length) {
 					throw new Error('Not authenticated');
