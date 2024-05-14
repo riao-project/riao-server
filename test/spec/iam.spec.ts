@@ -111,6 +111,7 @@ describe('Iam', () => {
 	let server: RiaoServer;
 	let authClient: RiaoHttpClient;
 	let userClient: RiaoHttpClient;
+	const now = Date.now() / 1000;
 
 	beforeAll(async () => {
 		server = new TestServer();
@@ -138,8 +139,10 @@ describe('Iam', () => {
 			},
 		});
 
-		expect(response.access.length).toBeGreaterThanOrEqual(1);
-		expect(response.refresh.length).toBeGreaterThanOrEqual(1);
+		expect(response.access.token.length).toBeGreaterThanOrEqual(1);
+		expect(response.access.expiration).toBeGreaterThanOrEqual(now);
+		expect(response.refresh.token.length).toBeGreaterThanOrEqual(1);
+		expect(response.refresh.expiration).toBeGreaterThanOrEqual(now);
 	});
 
 	it('can login', async () => {
@@ -150,8 +153,10 @@ describe('Iam', () => {
 			},
 		});
 
-		expect(response.access.length).toBeGreaterThanOrEqual(1);
-		expect(response.refresh.length).toBeGreaterThanOrEqual(1);
+		expect(response.access.token.length).toBeGreaterThanOrEqual(1);
+		expect(response.access.expiration).toBeGreaterThanOrEqual(now);
+		expect(response.refresh.token.length).toBeGreaterThanOrEqual(1);
+		expect(response.refresh.expiration).toBeGreaterThanOrEqual(now);
 	});
 
 	it('can refresh', async () => {
@@ -163,15 +168,17 @@ describe('Iam', () => {
 		});
 
 		expect(response.userId).toBeGreaterThanOrEqual(1);
-		expect(response.access.length).toBeGreaterThanOrEqual(1);
-		expect(response.refresh.length).toBeGreaterThanOrEqual(1);
+		expect(response.access.token.length).toBeGreaterThanOrEqual(1);
+		expect(response.access.expiration).toBeGreaterThanOrEqual(now);
+		expect(response.refresh.token.length).toBeGreaterThanOrEqual(1);
+		expect(response.refresh.expiration).toBeGreaterThanOrEqual(now);
 
 		await new Promise<void>((a, r) => setTimeout(() => a(), 1000));
 
 		const refreshed = <any>await authClient.action('refresh', {
 			body: {
 				id: response.userId,
-				access: response.refresh,
+				access: response.refresh.token,
 			},
 		});
 
@@ -190,7 +197,7 @@ describe('Iam', () => {
 			},
 		});
 
-		userClient.accessToken = tokens.access;
+		userClient.accessToken = tokens.access.token;
 
 		await new Promise<void>((a, r) => setTimeout(a, 1000));
 
