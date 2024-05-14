@@ -5,6 +5,7 @@ import {
 } from 'express';
 
 import * as express from 'express';
+import * as cors from 'cors';
 
 import { DatabaseRecordId } from '@riao/dbal';
 import { AuthenticationError } from '@riao/iam/errors/authentication-error';
@@ -93,6 +94,13 @@ export class RiaoServer {
 	public async start() {
 		this.app = express();
 		this.app.use(express.json());
+		this.app.use(
+			cors({
+				origin: true, // TODO: Static? Load from somewhere? Probably allow consumer to choose https://expressjs.com/en/resources/middleware/cors.html
+				// some legacy browsers (IE11, various SmartTVs) choke on 204
+				optionsSuccessStatus: 200,
+			})
+		);
 
 		this.registerControllers();
 

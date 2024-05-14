@@ -29,6 +29,7 @@
 		"@riao/http-client": "file:../riao-http-client/src",
 		"@riao/iam": "file:../riao-iam/src",
 		"@riao/server-contract": "file:../riao-server-contract/src",
+		"cors": "^2.8.5",
 		"express": "^4.19.2",
 		"ts-tiny-log": "^1.1.1"
 	},
