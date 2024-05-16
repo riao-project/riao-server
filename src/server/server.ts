@@ -222,12 +222,17 @@ export class RiaoServer {
 					throw new Error('Not authenticated');
 				}
 
-				const payload = await this.iam.verifyAccessToken({
-					accessToken: access,
-				});
+				try {
+					const payload = await this.iam.verifyAccessToken({
+						accessToken: access,
+					});
 
-				userId = payload.userId;
-				scopes = payload.scopes;
+					userId = payload.userId;
+					scopes = payload.scopes;
+				}
+				catch (e) {
+					throw new AuthenticationError('Not authenticated');
+				}
 			}
 			else {
 				throw new AuthenticationError('Not authenticated');
