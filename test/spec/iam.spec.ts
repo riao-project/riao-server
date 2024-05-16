@@ -73,7 +73,7 @@ class TestAuthController implements ControllerInterface {
 			});
 		},
 		refresh: async (request: ActionRequest) => {
-			return await iam.refresh(request.body.id, request.body.access);
+			return await iam.refresh(request.body.id, request.body.refresh);
 		},
 	};
 
@@ -167,22 +167,22 @@ describe('Iam', () => {
 			},
 		});
 
-		expect(response.userId).toBeGreaterThanOrEqual(1);
-		expect(response.access.token.length).toBeGreaterThanOrEqual(1);
-		expect(response.access.expiration).toBeGreaterThanOrEqual(now);
 		expect(response.refresh.token.length).toBeGreaterThanOrEqual(1);
-		expect(response.refresh.expiration).toBeGreaterThanOrEqual(now);
 
 		await new Promise<void>((a, r) => setTimeout(() => a(), 1000));
 
 		const refreshed = <any>await authClient.action('refresh', {
 			body: {
 				id: response.userId,
-				access: response.refresh.token,
+				refresh: response.refresh.token,
 			},
 		});
 
 		expect(refreshed.userId).toEqual(response.userId);
+		expect(refreshed.access.token.length).toBeGreaterThanOrEqual(1);
+		expect(refreshed.access.expiration).toBeGreaterThanOrEqual(now);
+		expect(refreshed.refresh.token.length).toBeGreaterThanOrEqual(1);
+		expect(refreshed.refresh.expiration).toBeGreaterThanOrEqual(now);
 	});
 
 	it('can\'t pull users if unauthenticated', async () => {
