@@ -30,7 +30,7 @@ describe('Server', () => {
 
 	beforeAll(async () => {
 		server = new TestServer();
-		server.start();
+		await server.start();
 
 		client = new RiaoHttpClient();
 		client.url = `http://localhost:${env.HTTP_PORT}/api/v1`;

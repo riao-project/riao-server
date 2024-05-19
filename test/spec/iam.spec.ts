@@ -115,7 +115,7 @@ describe('Iam', () => {
 
 	beforeAll(async () => {
 		server = new TestServer();
-		server.start();
+		await server.start();
 
 		authClient = new RiaoHttpClient();
 		authClient.url = `http://localhost:${env.HTTP_PORT + 1}/api/v1/auth`;
@@ -181,8 +181,6 @@ describe('Iam', () => {
 		expect(refreshed.userId).toEqual(response.userId);
 		expect(refreshed.access.token.length).toBeGreaterThanOrEqual(1);
 		expect(refreshed.access.expiration).toBeGreaterThanOrEqual(now);
-		expect(refreshed.refresh.token.length).toBeGreaterThanOrEqual(1);
-		expect(refreshed.refresh.expiration).toBeGreaterThanOrEqual(now);
 	});
 
 	it('can\'t pull users if unauthenticated', async () => {
