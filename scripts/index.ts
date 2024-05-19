@@ -1,4 +1,4 @@
-import { bootstrap } from '../src/app';
+import { bootstrap } from '../examples/app';
 
 /* eslint-disable no-console */
 if (process.argv.length < 3) {

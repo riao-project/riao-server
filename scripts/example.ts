@@ -1,5 +1,5 @@
-import { log } from '../src/log';
-import { env } from '../src/env';
+import { log } from '../examples/log';
+import { env } from '../examples/env';
 
 // Add this flag to run app's register/teardown
 // export const bootstrap = true;
