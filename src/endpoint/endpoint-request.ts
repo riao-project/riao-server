@@ -17,6 +17,9 @@ export type GetOneRequest<T extends DatabaseRecord = DatabaseRecord> =
 export type PostOneRequest<T extends DatabaseRecord = DatabaseRecord> =
 	BaseEndpointRequest & ServerContract.PostOneRequest<T>;
 
+export type SearchRequest<T extends DatabaseRecord = DatabaseRecord> =
+	BaseEndpointRequest & ServerContract.SearchRequest<T>;
+
 export type PatchOneRequest<T extends DatabaseRecord = DatabaseRecord> =
 	BaseEndpointRequest & ServerContract.PatchOneRequest<T>;
 

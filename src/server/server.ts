@@ -149,6 +149,20 @@ export class RiaoServer {
 			);
 		}
 
+		if (controller.search) {
+			this.app.post(
+				this.createPath(controller.path + '/search'),
+				this.wrapEndpoint('search', controller, async (request) =>
+					controller.search({
+						...request,
+						query: request.http.query,
+						params: request.http.params,
+						body: request.http.body,
+					})
+				)
+			);
+		}
+
 		if (controller.postOne) {
 			this.app.post(
 				this.createPath(controller.path),
