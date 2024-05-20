@@ -1,4 +1,11 @@
-import { DatabaseRecord, QueryRepository, SelectQuery } from '@riao/dbal';
+import {
+	DatabaseRecord,
+	QueryRepository,
+	SelectQuery,
+	and,
+	like,
+	or,
+} from '@riao/dbal';
 import { ControllerInterface } from '../controller/controller';
 import {
 	DeleteOneRequest,
@@ -14,6 +21,7 @@ implements ControllerInterface<T> {
 	public repo: QueryRepository<T>;
 	public identifiedBy = 'id';
 	public path = 'model';
+	public searchable?: string[];
 
 	async getMany(request: GetManyRequest<T>) {
 		const search: SelectQuery<T> = {};
@@ -46,6 +54,26 @@ implements ControllerInterface<T> {
 
 		if (request.body.where) {
 			search.where = request.body.where;
+		}
+
+		if (this.searchable && request.body.search) {
+			const likequery = [];
+
+			for (let i = 0; i < this.searchable.length; i++) {
+				const searchable = this.searchable[i];
+
+				likequery.push({
+					[searchable]: like('%' + request.body.search + '%'),
+				});
+
+				if (i < this.searchable.length - 1) {
+					likequery.push(or);
+				}
+			}
+
+			search.where = search.where
+				? [search.where, and, likequery]
+				: <any>likequery;
 		}
 
 		let count: undefined | number;
