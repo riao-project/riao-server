@@ -69,7 +69,7 @@ implements ControllerInterface<T> {
 				const searchable = this.searchable[i];
 
 				likequery.push({
-					[searchable]: like('%' + request.body.search + '%'),
+					[searchable]: like('%' + request.body.search.trim() + '%'),
 				});
 
 				if (i < this.searchable.length - 1) {
