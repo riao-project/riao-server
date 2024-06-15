@@ -206,7 +206,7 @@ export class RiaoServer {
 
 		for (const actionKey in controller.actions) {
 			this.app.post(
-				this.createPath(controller.path + '/' + actionKey),
+				this.createPath(controller.path + '/action/' + actionKey),
 				this.wrapEndpoint(actionKey, controller, async (request) =>
 					controller.actions[actionKey]({
 						...request,
