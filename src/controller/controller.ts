@@ -19,6 +19,10 @@ import {
 	SearchResponse,
 } from '@riao/server-contract/response';
 
+export type Actions = {
+	[key: string]: EndpointFunction<ActionRequest, ApiResponse>;
+};
+
 export interface ControllerInterface<
 	T extends DatabaseRecord = DatabaseRecord
 > {
@@ -34,7 +38,7 @@ export interface ControllerInterface<
 	patchOne?: EndpointFunction<PatchOneRequest<T>, PatchOneResponse<T>>;
 	deleteOne?: EndpointFunction<DeleteOneRequest, DeleteOneResponse>;
 
-	actions?: { [key: string]: EndpointFunction<ActionRequest, ApiResponse> };
+	actions?: Actions;
 }
 
 export type ControllerType = { new (): ControllerInterface };
