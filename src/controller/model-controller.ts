@@ -1,5 +1,6 @@
 import {
 	DatabaseRecord,
+	Join,
 	QueryRepository,
 	SelectQuery,
 	and,
@@ -22,6 +23,7 @@ implements ControllerInterface<T> {
 	public identifiedBy = 'id';
 	public path = 'model';
 	public searchable?: string[];
+	public searchJoins?: Join[];
 
 	async getMany(request: GetManyRequest<T>) {
 		const search: SelectQuery<T> = {};
@@ -54,6 +56,10 @@ implements ControllerInterface<T> {
 
 		if (request.body.where) {
 			search.where = request.body.where;
+		}
+
+		if (this.searchJoins) {
+			search.join = this.searchJoins;
 		}
 
 		if (this.searchable && request.body.search) {
