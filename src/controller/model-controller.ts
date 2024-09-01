@@ -109,7 +109,7 @@ implements ControllerInterface<T> {
 
 	async getOne(request: GetOneRequest) {
 		return await this.repo.findOneOrFail({
-			where: <T>{ [this.identifiedBy]: +request.params.id }, // TODO: Not always an int!?
+			where: <T>{ [this.identifiedBy]: request.params.id },
 		});
 	}
 
