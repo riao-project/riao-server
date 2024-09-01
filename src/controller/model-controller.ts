@@ -16,6 +16,8 @@ import {
 	PostOneRequest,
 	SearchRequest,
 } from '@riao/server-contract/request';
+import { KeyValExpression } from '@riao/dbal/expression/key-val-expression';
+import { SearchResponse } from '@riao/server-contract';
 
 export abstract class ModelController<T extends DatabaseRecord = DatabaseRecord>
 implements ControllerInterface<T> {
@@ -28,26 +30,26 @@ implements ControllerInterface<T> {
 	async getMany(request: GetManyRequest<T>) {
 		const search: SelectQuery<T> = {};
 
-		if (request.query.columns) {
+		if (request.query?.columns) {
 			search.columns = request.query.columns;
 		}
 
-		if (request.query.order) {
+		if (request.query?.order) {
 			search.orderBy = request.query.order;
 		}
 
-		if (request.query.limit) {
+		if (request.query?.limit) {
 			search.limit = request.query.limit;
 		}
 
-		if (request.query.offset) {
+		if (request.query?.offset) {
 			search.offset = request.query.offset;
 		}
 
 		return await this.repo.find(search);
 	}
 
-	async search(request: SearchRequest<T>) {
+	async search(request: SearchRequest<T>): Promise<SearchResponse<T>> {
 		const search: SelectQuery<T> = {};
 
 		if (request.body.columns) {
@@ -55,7 +57,7 @@ implements ControllerInterface<T> {
 		}
 
 		if (request.body.where) {
-			search.where = request.body.where;
+			search.where = <KeyValExpression<T>>request.body.where;
 		}
 
 		if (this.searchJoins) {

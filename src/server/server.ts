@@ -62,7 +62,7 @@ export class RiaoServer {
 
 				const retval = await callback({
 					http: request,
-					userId,
+					userId: userId ?? undefined,
 					scopes,
 				});
 
@@ -204,7 +204,9 @@ export class RiaoServer {
 			);
 		}
 
-		for (const actionKey in controller.actions) {
+		const actions = controller.actions ?? {};
+
+		for (const actionKey in actions) {
 			this.app.post(
 				this.createPath(controller.path + '/action/' + actionKey),
 				this.wrapEndpoint(actionKey, controller, async (request) =>
@@ -223,8 +225,8 @@ export class RiaoServer {
 		request: ExpressRequest,
 		controller: ControllerInterface
 	) {
-		let userId: DatabaseRecordId;
-		let scopes: string[];
+		let userId: null | DatabaseRecordId = null;
+		let scopes: string[] = [];
 
 		if (this.iam && controller.iam !== false) {
 			if (request.headers?.authorization) {
