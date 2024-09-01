@@ -114,13 +114,20 @@ implements ControllerInterface<T> {
 	}
 
 	async postOne(request: PostOneRequest<T>) {
-		const id = await this.repo.insertOne({
+		const record = await this.repo.insertOne({
 			record: <T>request.body,
 		});
 
-		return await this.getOne({
-			params: { id: id[this.identifiedBy] },
-		});
+		const id = record[this.identifiedBy];
+
+		if (!id) {
+			throw new Error(
+				'Could not receive ID back from query. ' +
+					'Check that the repository identifiedBy is set properly.'
+			);
+		}
+
+		return await this.getOne({ params: { id } });
 	}
 
 	async patchOne(request: PatchOneRequest<T>) {
